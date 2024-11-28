@@ -13,33 +13,20 @@ def RPS_game():
             print("Please enter a valid move")
          
     opponent = random.choice(choice) #assign a random choice in the list to opponent
+    print(f"Opponent Move: {opponent}")
     
-    if move == "rock" and opponent == "paper":
-        print("opponent move: ", opponent)
-        print(lose)
-    elif move == "rock" and opponent == "scissors":
-        print("opponent move: ", opponent)
-        print(win)
-    elif move == "paper" and opponent == "scissors":
-        print("opponent move: ", opponent)
-        print(lose)
-    elif move == "paper" and opponent == "rock":
-        print("opponent move: ", opponent)
-        print(win)
-    elif move == "scissors" and opponent == "rock":
-        print("opponent move: ", opponent)
-        print(lose)
-    elif move == "scissors" and opponent == "paper":
-        print("opponent move: ", opponent)
-        print(win)
-    elif move == opponent:
-        print("opponent move: ", opponent)
-        print("Tie!")
-        
+    if move == opponent:
+        return "Tie"
+    elif (move == "rock" and opponent == "scissors") or \
+         (move == "paper" and opponent == "rock") or \
+         (move == "scissors" and opponent == "paper"):
+        return "Win"
+    else:
+        return "Lose"
 
-RPS_game()
+print(RPS_game())
 
 while input("Do you want to play again? (y/n): ").lower() == "y": #ask user if they want to play again
-    RPS_game()
+    print(RPS_game())
 else:
     print("Thanks for playing!")
