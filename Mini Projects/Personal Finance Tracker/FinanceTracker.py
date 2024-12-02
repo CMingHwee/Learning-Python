@@ -24,6 +24,10 @@ label3.pack()
 date = Entry(window)
 date.pack()
 
+output_label = Label(window,
+                     text="")#label to display output in GUI instead of console
+output_label.pack()
+
 def add_expense():  
 
 #get data from their respective field
@@ -32,14 +36,15 @@ cat = category.get()
 date_data = date.get() 
 
 if amount and cat and date_data: #validation to check if fields are filled
-    print(f"Expense of ${amount} added under the category, {cat}, on {date_data}")
+    output_label.config(text=f"Expense of ${amount} added under the category, {cat}, on {date_data}", fg="green") #display message in green when success
+
     #clear the entry fields after adding expense
     expense.delete(0, END) 
     category.delete(0, END)
     date.delete(0, END)
     
 else:
-    print("Please fill up all fields") #display error message if any field are empty
+    output_label.config(text="Please fill up all fields", fg="red") #display error message in red if any field are empty
     
 add_button = Button(window, text="Add Expense", command=add_expense) #create button for adding expense
 add_button.pack() #add button to window
