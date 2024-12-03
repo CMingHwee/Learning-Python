@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 from datetime import datetime
+import os
+import csv
 
 window = Tk() #instantiate an instance of window
 window.title("Personal Fiance Tracker") #title of the window
@@ -42,6 +44,19 @@ def validate_date(date_text):
         return False
 
 
+def save_file(amount,cat,date_data): #function to save data into csv
+    file_name = "expenses.csv" #set file name
+    file_exists = os.path.exists(file_name) #check if file exist
+    try:
+        with open(file_name, mode="a", newline="") as file: #open file in append mode
+            writer = csv.writer(file) #create writer object
+            if not file_exists:
+              writer.writerow(["Amount","Category","Date"]) #write column headers first if file does not exist
+            writer.writerow([amount,cat,date_data]) #write data into new row
+    except Exception as e:
+        messagebox.showerror(f"An error has occurred while saving data: {e}") #display error details if data failed to save
+
+
 def add_expense():  
 
 #get data from their respective field
@@ -66,6 +81,9 @@ if not validate_date(date_data): #check if date is in correct format
     messagebox.showerror("Please enter a valid date in the format YYYY-MM-DD")
     return
 
+
+              
+save_file(amount, cat, date_data)
 
 output_label.config(text=f"Expense of ${amount:.2f} added under the category, {cat}, on {date_data}", fg="green") #display message in green when success
 
