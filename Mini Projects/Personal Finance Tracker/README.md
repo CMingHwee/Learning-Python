@@ -9,3 +9,4 @@ A Personal Finance Tracker built using Tkinter to help users keep track of their
 - Dynamic Feedback: Displays success or error messages directly within the app. 
 - File Saving: Expenses are saved in a CSV file, which allows for data retention even after closing the app.
 - Total Expense Calcultion: Calculates and displays the total expense at the bottom of the window and CSV file, updated every time a new expense is added.
+- Category Filter: Display expenses based on category by selecting the category in the drop-down menu and clicking the filter button.
