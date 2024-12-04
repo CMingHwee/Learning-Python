@@ -20,9 +20,10 @@ categories = ["Food", "Transport", "Rent", "Entertainment", "Utilities", "Miscel
 label2 = Label(window,
               text = "Category: ") 
 label2.pack()
+
 category = StringVar(window)
 category.set(categories[0]) #set default category to Food
-category_dropdown = OptionMenu(window, category, *categories) #create dropdown menu
+category_dropdown = OptionMenu(window, category, *categories) #create drop-down menu
 category_dropdown.pack()
 
 label3 = Label(window, 
@@ -39,6 +40,49 @@ total_label = Label(window,
                     text="Total Expense: $0.00")#label to display total expense
 total_label.pack()  #add total expense label to window
               
+filter_category = StringVar(window)
+filter_category.set(categories[0])  #default category to food
+label4 = Label(window, 
+      text="Filter by Category:")
+label4.pack()
+category_filter_dropdown = OptionMenu(window, filter_category, *categories) #create drop-down menu
+category_filter_dropdown.pack()
+
+filter_button = Button(window, text="Filter Expenses", command=filter_by_category) #create filter button
+filter_button.pack()
+
+
+
+def filter_by_category():
+    selected_category = filter_category.get() #get data from drop-down menu
+    file_name = "expenses.csv"
+    filtered_expense = [] #empty list to fill filtered expenses
+
+    if os.path.exists(file_name):
+        try:
+            with open(file_name, mode="r") as file:
+                reader = csv.reader(file)
+                next(reader) #skip header row
+                filtered_expense = [row for row in reader if row[1] == selected_category] #store filtered expense into list based on drop-down menu
+        except Exception as e:
+            messagebox.showerror("Filter Error", f"Unable to sort expenses by date: {e}")
+
+    total_filtered_expense = sum(float(row[0]) for row in filtered_expense if row[0])  #convert amount to float and sum them up
+
+    filtered_window = Toplevel(window) #open a new top level window
+    filtered_window.title(f"Expenses - {selected_category}") #title for the new window based on category
+    filtered_window.geometry("400x300") #window size
+
+    label5 = Label(filtered_window, 
+          text=f"Expenses for {selected_category}", font=("Arial", 12, "bold")) #bold header label to indicate what category are displayed
+    label5.pack()
+    label6 = Label(filtered_window, 
+              text=f"Total for {selected_category}: ${total_filtered_expense:.2f}") #display total expense for the filtered category
+    label6.pack()
+
+    for expense in filtered_expense:
+        Label(filtered_window, 
+              text=f"${expense[0]} - {expense[1]} - {expense[2]}").pack() #create label for each filter expense 
 
 def validate_date(date_text):
     #Check if the date is valid and follows YYYY-MM-DD format
