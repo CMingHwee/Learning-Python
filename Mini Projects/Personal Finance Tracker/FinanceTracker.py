@@ -48,9 +48,6 @@ label4.pack()
 category_filter_dropdown = OptionMenu(window, filter_category, *categories) #create drop-down menu
 category_filter_dropdown.pack()
 
-filter_button = Button(window, text="Filter Expenses", command=filter_by_category) #create filter button
-filter_button.pack()
-
 
 
 def filter_by_category():
@@ -83,6 +80,10 @@ def filter_by_category():
     for expense in filtered_expense:
         Label(filtered_window, 
               text=f"${expense[0]} - {expense[1]} - {expense[2]}").pack() #create label for each filter expense 
+
+filter_button = Button(window, text="Filter Expenses", command=filter_by_category) #create filter button
+filter_button.pack()
+              
 
 def validate_date(date_text):
     #Check if the date is valid and follows YYYY-MM-DD format
@@ -150,6 +151,48 @@ def write_total_to_csv():
     except Exception as e:
         messagebox.showerror("Update Error", f"An error has occurred while updating total expense: {e}")
         
+def delete_expense():
+    file_name = "expenses.csv"
+    if not os.path.exists(file_name): #check if file exist
+        messagebox.showerror("Error", "No expenses found to delete.")
+        return
+
+    delete_window = Toplevel(window) #new top level window
+    delete_window.title("Delete Expense") #window title
+    delete_window.geometry("400x300")
+
+    delete_label = Label(delete_window, text="Select an expense to delete:", font=("Arial", 12, "bold"))
+    delete_label.pack()
+
+    expense_listbox = Listbox(delete_window, width=50, height=15)
+    expense_listbox.pack()
+
+    with open(file_name, mode="r") as file:
+        reader = csv.reader(file)
+        rows = list(reader) #convert data into list
+
+    for i, row in enumerate(rows[1:]):  #loop through all row, skipping the header row
+        expense_listbox.insert(i, f"${row[0]} - {row[1]} - {row[2]}") #insert data into the listbox
+
+    def confirm_delete():
+        selected_index = expense_listbox.curselection() #get index of current item in listbox
+        if not selected_index: #if no item was selected
+            messagebox.showerror("Error", "Please select an expense to delete.")
+            return
+
+        del rows[selected_index[0] + 1]  #delete row for selected index (adding 1 to account for header row)
+
+        with open(file_name, mode="w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerows(rows) #rewrite updated rows after deleting row back into the csv
+
+        messagebox.showinfo("Success", "Expense deleted successfully")
+        delete_window.destroy() #close this window after deleting row
+        refresh_total_label() #refresh displayed total expense
+
+    confirm_button = Button(delete_window, text="Delete Selected", command=confirm_delete)
+    confirm_button.pack()
+
 def add_expense():  
 
 #get data from their respective field
@@ -173,6 +216,7 @@ except ValueError: #if amount entered is something else like "abc"
 if not validate_date(date_data): #check if date is in correct format
     messagebox.showerror("Input Error", "Please enter a valid date in the format YYYY-MM-DD")
     return
+
 
 save_file(amount, cat, date_data)
 
