@@ -6,46 +6,61 @@ import csv
 
 window = Tk()  # instantiate an instance of window
 window.title("Personal Fiance Tracker")  # title of the window
-window.geometry("420x420")  # set window size
+window.geometry("500x600")  # set window size
+
+window.config(bg="#f4f4f9")  # light grey background
+
+header_label = Label(window,
+                     text="Personal Finance Tracker",
+                     font=("Arial", 16, "bold"),
+                     bg="#f4f4f9",
+                     fg="#4CAF50")  # header label
+header_label.pack(pady=20)
 
 # create a label and entry field for the expense amount
 label = Label(window,
-              text="Expense Amount: ")
+              text="Expense Amount: ",
+              font=("Arial", 12),
+              bg="#f4f4f9")
 label.pack()  # add the label to the window
-expense = Entry(window)  # create an entry field for the user to input the expense amount
+expense = Entry(window,
+                font=("Arial", 12))  # create an entry field for the user to input the expense amount
 expense.pack()  # add the entry field to the window
 
 categories = ["Food", "Transport", "Rent", "Entertainment", "Utilities", "Miscellaneous"]  # categories list
 label2 = Label(window,
-               text="Category: ")
-label2.pack()
+               text="Category: ",
+               font=("Arial", 12),
+               bg="#f4f4f9")
+label2.pack(pady=5)
 
 category = StringVar(window)
 category.set(categories[0])  # set default category to Food
 category_dropdown = OptionMenu(window, category, *categories)  # create drop-down menu
+category_dropdown.config(bg="#ffffff",
+                         font=("Arial", 12))
 category_dropdown.pack()
 
 label3 = Label(window,
-               text="Date (YYYY-MM-DD):")
-label3.pack()
-date = Entry(window)
-date.pack()
+               text="Date (YYYY-MM-DD):",
+               font=("Arial", 12),
+               bg="#f4f4f9")
+label3.pack(pady=5)
+date = Entry(window,
+             font=("Arial", 12))
+date.pack(pady=5)
 
 output_label = Label(window,
-                     text="")  # label to display output in GUI instead of console
-output_label.pack()
+                     text="",
+                     font=("Arial", 12), bg="#f4f4f9", fg="green")  # label to display output in GUI instead of console
+output_label.pack(pady=5)
 
 total_label = Label(window,
-                    text="Total Expense: $0.00")  # label to display total expense
-total_label.pack()  # add total expense label to window
+                    text="Total Expense: $0.00",
+                    font=("Arial", 12, "bold"),
+                    bg="#f4f4f9")  # label to display total expense
+total_label.pack(pady=10)  # add total expense label to window
 
-filter_category = StringVar(window)
-filter_category.set(categories[0])  # default category to food
-label4 = Label(window,
-               text="Filter by Category:")
-label4.pack()
-category_filter_dropdown = OptionMenu(window, filter_category, *categories)  # create drop-down menu
-category_filter_dropdown.pack()
 
 
 def filter_by_category():
@@ -83,8 +98,6 @@ def filter_by_category():
               text=f"${expense[0]} - {expense[1]} - {expense[2]}").pack()  # create label for each filter expense
 
 
-filter_button = Button(window, text="Filter Expenses", command=filter_by_category)  # create filter button
-filter_button.pack()
 
 
 def validate_date(date_text):
@@ -241,7 +254,23 @@ def add_expense():
    expense.delete(0, END)
    date.delete(0, END)
 
-add_button = Button(window, text="Add Expense", command=add_expense)  # create button for adding expense
-add_button.pack()  # add button to window
+add_button = Button(window, text="Add Expense", font=("Helvetica", 12, "bold"), bg="#4CAF50", fg="white", command=add_expense, relief="raised", bd=3)  # create button for adding expense
+add_button.pack(pady=10)  # add button to window
+
+
+filter_category = StringVar(window)
+filter_category.set(categories[0])  # default category to food
+label4 = Label(window,
+               text="Filter by Category:",
+               font=("Arial", 12),
+               bg="#f4f4f9")
+label4.pack(pady=5)
+category_filter_dropdown = OptionMenu(window, filter_category, *categories)  # create drop-down menu
+category_filter_dropdown.config(bg="#ffffff", font=("Arial", 12))
+category_filter_dropdown.pack()
+
+
+filter_button = Button(window, text="Filter Expenses", font=("Arial", 12, "bold"), bg="#4CAF50", fg="white", command=filter_by_category, relief="raised", bd=3)  # create filter button
+filter_button.pack(pady=10)
 
 window.mainloop()  # keep the window running so that it will not close after adding expense
