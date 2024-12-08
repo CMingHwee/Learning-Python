@@ -121,9 +121,12 @@ def calculate_total_expense():  # function to calculate total expenses from CSV
                 next(reader)  # skip header row so that it will not be included in the calculation
 
                 for row in reader:
-                    if row and row[
-                        0] != "Total Expense":  # check if row is not empty and doesn't have "Total Expense" label
-                        total += float(row[0])  # convert value in "amount" row into float and add it to total
+                    if row and row[0] != "Total Expense":  # check if row is not empty and doesn't have "Total Expense" label
+                        try:
+                           total += float(row[0])  # convert value in "amount" row into float and add it to total
+                        except ValueError:
+                            # ignore rows that cannot be converted to float
+                            continue
         except Exception as e:
             messagebox.showerror("Read Error",
                                  f"An error has occurred while reading the file: {e}")  # display error if file failed to read
@@ -139,25 +142,23 @@ def write_total_to_csv():
             with open(file_name, mode="r", newline="") as file:
                 reader = csv.reader(file)
                 for row in reader:
-                    rows.append(row)
+                    if row and row[0] != "Total Expense:":
+                       rows.append(row)
+
+            # append the new total expense row at the bottom
+            rows.append(["Total Expense:", f"{total_expense:.2f}"])
 
         with open(file_name, mode="w", newline="") as file:
             writer = csv.writer(file)
-            total_row_exist = False
+            writer.writerows(rows)
 
-            for row in rows:
-                if row and row[0] == "Total Expense:":
-                    # update the existing "Total Expense" row
-                    writer.writerow(["Total Expense:", f"{total_expense:.2f}"])
-                    total_row_exist = True
-                else:
-                    writer.writerow(row)
 
-            # if the "Total Expense" row was not found, append it at the end
-            if not total_row_exist:
-                writer.writerow(["Total Expense:", f"{total_expense:.2f}"])
     except Exception as e:
         messagebox.showerror("Update Error", f"An error has occurred while updating total expense: {e}")
+
+def refresh_total_label():
+    total_expense = calculate_total_expense()  # recalculate the total expense
+    total_label.config(text=f"Total Expense: ${total_expense:.2f}")  # update the label
 
 
 def delete_expense():
