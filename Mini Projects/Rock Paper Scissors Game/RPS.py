@@ -20,7 +20,7 @@ def RPS_game(difficulty):
     global p_rock, p_paper, p_scissors
 
     while True:
-        move = input("Rock, Paper, or Scissors").lower()
+        move = input("Rock, Paper, or Scissors ").lower()
         if move in choice:  #prompt user for input until user input one of the choices
             move_history.append(move) #add move to move history
             if len(move_history) > 10:
