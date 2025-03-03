@@ -5,7 +5,7 @@ height = int(input("Please enter your height in cm: "))
 age = int(input("Please enter your age: "))
 
 
-activity = input("What is your activity level? \n 1.Sedentary \n 2.Lightly Active \n 3.Moderately Active \n 4.Very Active \n 5.Extremely Active: \n")
+activity = input("What is your activity level? (e.g., 1, 2, 3, 4, 5) \n 1.Sedentary \n 2.Lightly Active \n 3.Moderately Active \n 4.Very Active \n 5.Extremely Active: \n")
 BMR = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
 
 if activity == "1":
@@ -19,14 +19,14 @@ if activity == "4":
 if activity == "5":
     TDEE = BMR * 1.9
     
-print(f"Your today daily energy expenditure is: {TDEE:.2f} \n")
+print(f"Your total daily energy expenditure is: {TDEE:.2f} \n")
 total_calories_consumed = 0
 
 while True:
     print("\nEnter food nutrients information")
-    Carbohydrate = int(input("Please enter the Carbohydrate amount: ")) 
-    Fat = int(input("Please enter the Fat amount: "))
-    Protein = int(input("Please enter the Protein amount: "))
+    Carbohydrate = int(input("Please enter the Carbohydrate amount in grams: ")) 
+    Fat = int(input("Please enter the Fat amount in grams: "))
+    Protein = int(input("Please enter the Protein amount in grams: "))
     Calories = ((Carbohydrate * 4) + (Fat * 9) + (Protein * 4))
     total_calories_consumed += Calories
     print(f"Nutrition Information: \nCarbohydrates: {Carbohydrate}g \nFats: {Fat}g \nProtein: {Protein}g \nCalories: {Calories}kcal")
@@ -35,3 +35,8 @@ while True:
     if Remaining < 0:
         print("You have exceeded your daily calorie intake!")
         break
+
+
+
+
+
